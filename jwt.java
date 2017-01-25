@@ -33,19 +33,28 @@ public class jwt extends HttpServlet {
 	@Override
 	 protected void service(HttpServletRequest request, HttpServletResponse response)
 			 throws IOException, ServletException {
+
 		// En este punto se deberá hacer la autentificación por parte del cliente de sus usuarios.
+		
 		String usuario = "username"; // usuario (debe ser un email)
 		String nombre = "nombre"; // nombre del usuario
 		String apellido = "apellido"; // apellido del usuario
+		String departamento = "Departamento Comercial"; // departamento del usuario
+		String referencia = "identificador_propio"; // identificador interno del usuario
 
 		// Creatte JWT with data
 		JWTClaimsSet jwtClaims = new JWTClaimsSet();
 		jwtClaims.setIssueTime(new Date());
-		jwtClaims.setJWTID(request.getHeader("jwtId"));
-		jwtClaims.setCustomClaim("nombre", nombre);
-		jwtClaims.setCustomClaim("apellido", apellido);
-		jwtClaims.setCustomClaim("roles", "user");
-		jwtClaims.setSubject(usuario);
+		jwtClaims.setJWTID(request.getHeader("jwtId")); 
+		jwtClaims.setSubject(usuario); // OBLIGATORIO
+		jwtClaims.setCustomClaim("nombre", nombre); // OBLIGATORIO
+		jwtClaims.setCustomClaim("apellido", apellido); // OBLIGATORIO
+		jwtClaims.setCustomClaim("roles", "user"); // OBLIGATORIO
+		
+		// los siguientes claims son opcionales
+		jwtClaims.setCustomClaim("departamento", departamento); // OPCIONAL
+		jwtClaims.setCustomClaim("referencia", referencia); // OPCIONAL
+		
 		jwtClaims.setExpirationTime(new Date(System.currentTimeMillis() + 30000));
 
 		// Create JWS header with HS256 algorithm
